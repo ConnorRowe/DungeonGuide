@@ -1,4 +1,4 @@
 ## Interface: 80000
 ## Title: DungeonGuide
-## Dependencies: tomtom
+## Dependencies: TomTom
 code.lua

@@ -1,14 +1,20 @@
 -- This file is loaded from "DungeonGuide.toc"
 
+local function SetTomTomCoords(zone, x, y)
+	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)
+	ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
+end	
+
 local function DungeonGuideCommands(msg, editbox)
 
   if msg == "deadmines" then
 	  print("DG activating " .. msg)
-	  DEFAULT_CHAT_FRAME.editBox:SetText("/way 10 10") ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0) 
+	  SetTomTomCoords("Deadmines", 10,10); 
 	  
   elseif msg == "wailingcaverns" then
 	print("DG activating " .. msg)
-	
+	SetTomTomCoords("Wailing Caverns", 15,15); 
+
 	else
 	print("Syntax: /dg instance");
 	end

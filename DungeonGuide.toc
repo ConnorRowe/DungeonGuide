@@ -1,4 +1,10 @@
 ## Interface: 80000
 ## Title: DungeonGuide
+## Auther: connorrowe
 ## Dependencies: TomTom
+
+libs\LibStub\LibStub.lua
+libs\HereBeDragons\HereBeDragons-2.0.lua
+libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
+
 code.lua

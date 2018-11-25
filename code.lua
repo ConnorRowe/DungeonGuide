@@ -20,6 +20,21 @@ local function DungeonGuideCommands(msg, editbox)
 	-- local facing = GetPlayerFacing()
 	-- GetPlayerFacing does not work in instances
 	
+	if GetZoneText() == "The Wailing Caverns" then
+		print "Player is in correct zone"
+		end
+		
+	-- Bosses and their encounter IDs
+	local anacondra = GetLFGDungeonEncounterInfo(1,1)
+	local cobrahn = GetLFGDungeonEncounterInfo(1,2)
+	local kresh = GetLFGDungeonEncounterInfo(1,3)
+	local pythas = GetLFGDungeonEncounterInfo(1,4)
+	local skum = GetLFGDungeonEncounterInfo(1,5)
+	local serpentis = GetLFGDungeonEncounterInfo(1,6)
+	local verden = GetLFGDungeonEncounterInfo(1,7)
+	local mutanus = GetLFGDungeonEncounterInfo(1,8)
+	local serpentis = GetLFGDungeonEncounterInfo(1,6)
+		
 	local dungeonID = 1;
 	local name, typeID, subtypeID, minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel, expansionLevel, groupID, textureFilename, difficulty, maxPlayers, description, isHoliday, bonusRepAmount, minPlayers, isTimeWalker, name2, minGearLevel = GetLFGDungeonInfo(dungeonID)
 		

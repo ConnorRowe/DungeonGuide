@@ -1,11 +1,25 @@
 -- This file is loaded from "DungeonGuide.toc"
 local hbd = LibStub("HereBeDragons-2.0")
-local frame = CreateFrame("FRAME", "DGFrame");
-frame:RegisterEvent("BOSS_KILL");
+local frame = CreateFrame("FRAME", "DGFrame", UIParent)
+frame:RegisterEvent("BOSS_KILL")
 local function EHBossKill(self, event, id, name, ...)
- print(event .. ": " .. id .. ", " .. name);
+ print(event .. ": " .. id .. ", " .. name)
 end
-frame:SetScript("OnEvent", EHBossKill);
+frame:SetScript("OnEvent", EHBossKill)
+
+-- Set frame as drag-able.
+frame:SetMovable(true)
+frame:EnableMouse(true)
+frame:RegisterForDrag("LeftButton")
+frame:SetScript("OnDragStart", frame.StartMoving)
+frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+
+-- The code below makes the frame visible, and is not necessary to enable dragging.
+frame:SetPoint("CENTER")
+frame:SetSize(64, 64)
+local tex = frame:CreateTexture("ARTWORK")
+tex:SetAllPoints()
+tex:SetColorTexture(1.0, 0.5, 0, 0.5)
 
 local function SetTomTomCoords(zone, x, y)
 	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)
@@ -16,11 +30,11 @@ local function DungeonGuideCommands(msg, editbox)
 
   if msg == "deadmines" then
 	  print("DG activating " .. msg)
-	  SetTomTomCoords("Deadmines", 10,10); 
+	  SetTomTomCoords("Deadmines", 10,10)
 	  
   elseif msg == "wailingcaverns" then
 	print("DG activating " .. msg)
-	SetTomTomCoords("Wailing Caverns", 15,15);
+	SetTomTomCoords("Wailing Caverns", 15,15)
   
   elseif msg == "test" then
 	-- local facing = GetPlayerFacing()
@@ -41,13 +55,13 @@ local function DungeonGuideCommands(msg, editbox)
 	local mutanus = GetLFGDungeonEncounterInfo(1,8)
 	local serpentis = GetLFGDungeonEncounterInfo(1,6)
 		
-	local dungeonID = 1;
+	local dungeonID = 1
 	local name, typeID, subtypeID, minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel, expansionLevel, groupID, textureFilename, difficulty, maxPlayers, description, isHoliday, bonusRepAmount, minPlayers, isTimeWalker, name2, minGearLevel = GetLFGDungeonInfo(dungeonID)
 		
 	print("name: " .. name .. ", name2: " .. name2 .. ", typeID: " .. typeID)
 
 	else
-	print("Syntax: /dg instance");
+	print("Syntax: /dg instance")
 	end
 end
 

@@ -14,12 +14,14 @@ frame:RegisterForDrag("LeftButton")
 frame:SetScript("OnDragStart", frame.StartMoving)
 frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 
--- The code below makes the frame visible, and is not necessary to enable dragging.
+-- Frame rendering stuff
 frame:SetPoint("CENTER")
-frame:SetSize(64, 64)
+frame:SetSize(574, 156)
 local tex = frame:CreateTexture("ARTWORK")
+tex:SetTexture("Interface/QUESTFRAME/TalkingHeads.BLP", CLAMPTOBLACKADDITIVE, CLAMPTOBLACKADDITIVE, LINEAR)
+tex:SetTexCoord(0, 0.560546875, 0.4609375, 0.61328125)
+tex:SetBlendMode("BLEND")
 tex:SetAllPoints()
-tex:SetColorTexture(1.0, 0.5, 0, 0.5)
 
 local function SetTomTomCoords(zone, x, y)
 	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)

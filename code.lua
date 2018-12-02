@@ -2,8 +2,8 @@
 local hbd = LibStub("HereBeDragons-2.0")
 local frame = CreateFrame("FRAME", "DGFrame");
 frame:RegisterEvent("BOSS_KILL");
-local function EHBossKill(self, event, ...)
- print(event);
+local function EHBossKill(self, event, id, name, ...)
+ print(event .. ": " .. id .. ", " .. name);
 end
 frame:SetScript("OnEvent", EHBossKill);
 

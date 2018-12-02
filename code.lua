@@ -1,11 +1,12 @@
 -- This file is loaded from "DungeonGuide.toc"
-local hbd = LibStub("HereBeDragons-2.0")
 local frame = CreateFrame("FRAME", "DGFrame", UIParent)
 frame:RegisterEvent("BOSS_KILL")
 local function EHBossKill(self, event, id, name, ...)
  print(event .. ": " .. id .. ", " .. name)
 end
 frame:SetScript("OnEvent", EHBossKill)
+
+local sizeX = 574; local sizeY = 156
 
 -- Set frame as drag-able.
 frame:SetMovable(true)
@@ -16,12 +17,22 @@ frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
 
 -- Frame rendering stuff
 frame:SetPoint("CENTER")
-frame:SetSize(574, 156)
+frame:SetSize(sizeX, sizeY)
 local tex = frame:CreateTexture("ARTWORK")
 tex:SetTexture("Interface/QUESTFRAME/TalkingHeads.BLP", CLAMPTOBLACKADDITIVE, CLAMPTOBLACKADDITIVE, LINEAR)
 tex:SetTexCoord(0, 0.560546875, 0.4609375, 0.61328125)
 tex:SetBlendMode("BLEND")
 tex:SetAllPoints()
+--tex:SetColorTexture(0.0,0.0,0.0,0.0)
+
+--Text stuff
+local HTMLFrame = CreateFrame("SimpleHTML", "HTMLFrame", frame)
+local text = "<html><body><h1>Wailing Caverns:</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet ultrices ex rhoncus fermentum. Vestibulum luctus quam at lectus varius tincidunt. Donec nec quam suscipit, lacinia justo sit amet, pellentesque ex. Phasellus dapibus sagittis suscipit. Fusce magna tellus, scelerisque in fermentum vel, ultricies in dui.</p></body></html>"
+HTMLFrame:SetPoint("CENTER")
+HTMLFrame:SetSize(sizeX*0.85, sizeY*0.7)
+HTMLFrame:SetText(text)
+HTMLFrame:SetFont('Fonts\\FRIZQT__.TTF', 12);
+HTMLFrame:SetTextColor(0.1,0.1,0.1,1.0)
 
 local function SetTomTomCoords(zone, x, y)
 	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)

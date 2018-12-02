@@ -1,5 +1,11 @@
 -- This file is loaded from "DungeonGuide.toc"
 local hbd = LibStub("HereBeDragons-2.0")
+local frame = CreateFrame("FRAME", "DGFrame");
+frame:RegisterEvent("BOSS_KILL");
+local function EHBossKill(self, event, ...)
+ print(event);
+end
+frame:SetScript("OnEvent", EHBossKill);
 
 local function SetTomTomCoords(zone, x, y)
 	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)

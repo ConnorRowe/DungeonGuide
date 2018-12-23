@@ -2,7 +2,8 @@
 local frame = CreateFrame("FRAME", "DGFrame", UIParent)
 frame:RegisterEvent("BOSS_KILL")
 local function EHBossKill(self, event, id, name, ...)
- print(event .. ": " .. id .. ", " .. name)
+	print(event .. ": " .. id .. ", " .. name)
+	IncrementDispTxt()
 end
 frame:SetScript("OnEvent", EHBossKill)
 
@@ -27,12 +28,25 @@ tex:SetAllPoints()
 
 --Text stuff
 local HTMLFrame = CreateFrame("SimpleHTML", "HTMLFrame", frame)
-local text = "<html><body><h1>Wailing Caverns:</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet ultrices ex rhoncus fermentum. Vestibulum luctus quam at lectus varius tincidunt. Donec nec quam suscipit, lacinia justo sit amet, pellentesque ex. Phasellus dapibus sagittis suscipit. Fusce magna tellus, scelerisque in fermentum vel, ultricies in dui.</p></body></html>"
+local text = "IncrementDispTxt AINT WORKIN KIDDO"
 HTMLFrame:SetPoint("CENTER")
 HTMLFrame:SetSize(sizeX*0.85, sizeY*0.7)
 HTMLFrame:SetText(text)
 HTMLFrame:SetFont('Fonts\\FRIZQT__.TTF', 12);
+HTMLFrame:SetFontObject('h1', "GameFontNormal");
 HTMLFrame:SetTextColor(0.1,0.1,0.1,1.0)
+
+--Display Text Array
+local dispTxt = {"Proceed downwards through the cave, killing raptors along the way.<br />After the large skeleton, turn left and walk towards the night elves and kill |cffa335ee Lady Anacondra.", "Now, walk forwards up to the path bridging the two sides of the cavern.<br />Turn left and jump down from the bridge into the water below, and follow the cave to |cffa335ee Lord Pythas.", "", ""}
+--To keep track of the array index
+local dtIndex = 1;
+--Function to update text on the HTMLFrame element
+function IncrementDispTxt()
+	local newText = "<html><body><h1>|cff0070dd Wailing Caverns</h1><p><br />" .. dispTxt[dtIndex] .. "</p></body></html>"
+	HTMLFrame:SetText(newText)
+	dtIndex = dtIndex + 1
+	print(newText)
+end	
 
 local function SetTomTomCoords(zone, x, y)
 	DEFAULT_CHAT_FRAME.editBox:SetText("/way " .. zone .. x .. " " .. y)
@@ -50,13 +64,7 @@ local function DungeonGuideCommands(msg, editbox)
 	SetTomTomCoords("Wailing Caverns", 15,15)
   
   elseif msg == "test" then
-	-- local facing = GetPlayerFacing()
-	-- GetPlayerFacing does not work in instances
-	
-	if GetZoneText() == "The Wailing Caverns" then
-		print "Player is in correct zone"
-		end
-		
+			
 	-- Bosses and their encounter IDs
 	local anacondra = GetLFGDungeonEncounterInfo(1,1)
 	local cobrahn = GetLFGDungeonEncounterInfo(1,2)
@@ -71,12 +79,16 @@ local function DungeonGuideCommands(msg, editbox)
 	local dungeonID = 1
 	local name, typeID, subtypeID, minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel, expansionLevel, groupID, textureFilename, difficulty, maxPlayers, description, isHoliday, bonusRepAmount, minPlayers, isTimeWalker, name2, minGearLevel = GetLFGDungeonInfo(dungeonID)
 		
-	print("name: " .. name .. ", name2: " .. name2 .. ", typeID: " .. typeID)
+	--print("name: " .. name .. ", name2: " .. name2 .. ", typeID: " .. typeID)
+	
+	IncrementDispTxt()
 
 	else
 	print("Syntax: /dg instance")
 	end
 end
+
+IncrementDispTxt()
 
 SLASH_DG1, SLASH_DG2 = '/dg', '/dungeonguide';
 

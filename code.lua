@@ -1,11 +1,13 @@
 -- This file is loaded from "DungeonGuide.toc"
 local frame = CreateFrame("FRAME", "DGFrame", UIParent)
 frame:RegisterEvent("BOSS_KILL")
-local function EHBossKill(self, event, id, name, ...)
-	print(event .. ": " .. id .. ", " .. name)
-	IncrementDispTxt()
-end
-frame:SetScript("OnEvent", EHBossKill)
+frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+curInstanceName = ""
+--Whether to display certain elements
+showFlag = false;
+--To keep track of the array index
+local dtIndex;
 
 local sizeX = 574; local sizeY = 156
 
@@ -24,11 +26,10 @@ tex:SetTexture("Interface/QUESTFRAME/TalkingHeads.BLP", CLAMPTOBLACKADDITIVE, CL
 tex:SetTexCoord(0, 0.560546875, 0.4609375, 0.61328125)
 tex:SetBlendMode("BLEND")
 tex:SetAllPoints()
---tex:SetColorTexture(0.0,0.0,0.0,0.0)
 
 --Text stuff
 local HTMLFrame = CreateFrame("SimpleHTML", "HTMLFrame", frame)
-local text = "IncrementDispTxt AINT WORKIN KIDDO"
+local text = ""
 HTMLFrame:SetPoint("CENTER")
 HTMLFrame:SetSize(sizeX*0.85, sizeY*0.7)
 HTMLFrame:SetText(text)
@@ -36,16 +37,59 @@ HTMLFrame:SetFont('Fonts\\FRIZQT__.TTF', 12);
 HTMLFrame:SetFontObject('h1', "GameFontNormal");
 HTMLFrame:SetTextColor(0.1,0.1,0.1,1.0)
 
+local function UpdateFrameDisplay(bool)
+	if bool then
+		HTMLFrame:SetTextColor(0.1,0.1,0.1,1.0)
+		tex:SetTexture("Interface/QUESTFRAME/TalkingHeads.BLP", CLAMPTOBLACKADDITIVE, CLAMPTOBLACKADDITIVE, LINEAR)
+		frame:SetMovable(true)
+		frame:EnableMouse(true)
+	else
+		HTMLFrame:SetTextColor(0.1,0.1,0.1,1.0)
+		tex:SetColorTexture(0.0,0.0,0.0,0.0)
+		frame:SetMovable(false)
+		frame:EnableMouse(false)
+	end
+end
+
+local function EHBossKill(self, event, id, name, ...)
+	print(event)
+	if event == "BOSS_KILL" then
+		print("DG: " .. name .. "killed, proceeding to next step.")
+		IncrementDispTxt()
+	elseif event == "PLAYER_ENTERING_WORLD" then
+		--Checking if the player is in an instance or not.
+		dtIndex = 1;
+		if IsInInstance() then
+			local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID, instanceGroupSize, lfgDungeonsID = GetInstanceInfo()
+			curInstanceName = name;
+			if name == "Wailing Caverns" then showFlag = true ; print(name) ; end
+			UpdateFrameDisplay(showFlag)
+		else
+			showFlag = false
+			UpdateFrameDisplay(showFlag)
+		end
+		
+		if showFlag then print("showFlag = true")
+		else print("showFlag = false")
+		end
+		
+		IncrementDispTxt()
+	end
+end
+frame:SetScript("OnEvent", EHBossKill)
+
 --Display Text Array
-local dispTxt = {"Proceed downwards through the cave, killing raptors along the way.<br />After the large skeleton, turn left and walk towards the night elves and kill |cffa335ee Lady Anacondra.", "Now, walk forwards up to the path bridging the two sides of the cavern.<br />Turn left and jump down from the bridge into the water below, and follow the cave to |cffa335ee Lord Pythas.", "", ""}
---To keep track of the array index
-local dtIndex = 1;
+local dispTxt_WC = {"Proceed downwards through the cave, killing raptors along the way.<br />After the skeletons, turn left and walk towards the two night elves then kill |cffa335ee Lady Anacondra.", "Now, walk forwards up to the path bridging the two sides of the cavern.<br />Turn left and jump down from the bridge into the water below, and follow the cave to |cffa335ee Lord Pythas.", "", ""}
+
 --Function to update text on the HTMLFrame element
 function IncrementDispTxt()
-	local newText = "<html><body><h1>|cff0070dd Wailing Caverns</h1><p><br />" .. dispTxt[dtIndex] .. "</p></body></html>"
+	local newText
+	if showFlag then newText = "<html><body><h1>|cff0070dd Wailing Caverns</h1><p><br />" .. dispTxt_WC[dtIndex] .. "</p></body></html>" 
+	else newText = ""
+	end
 	HTMLFrame:SetText(newText)
+	print("HTMLFRAME:SetText(" .. newText .. ")\n" .. "dtIndex = " .. dtIndex)
 	dtIndex = dtIndex + 1
-	print(newText)
 end	
 
 local function SetTomTomCoords(zone, x, y)
@@ -76,19 +120,15 @@ local function DungeonGuideCommands(msg, editbox)
 	local mutanus = GetLFGDungeonEncounterInfo(1,8)
 	local serpentis = GetLFGDungeonEncounterInfo(1,6)
 		
-	local dungeonID = 1
-	local name, typeID, subtypeID, minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel, expansionLevel, groupID, textureFilename, difficulty, maxPlayers, description, isHoliday, bonusRepAmount, minPlayers, isTimeWalker, name2, minGearLevel = GetLFGDungeonInfo(dungeonID)
+	--local dungeonID = 1
+	--local name, typeID, subtypeID, minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel, expansionLevel, groupID, textureFilename, difficulty, maxPlayers, description, isHoliday, bonusRepAmount, minPlayers, isTimeWalker, name2, minGearLevel = GetLFGDungeonInfo(dungeonID)
 		
 	--print("name: " .. name .. ", name2: " .. name2 .. ", typeID: " .. typeID)
 	
-	IncrementDispTxt()
-
 	else
 	print("Syntax: /dg instance")
 	end
 end
-
-IncrementDispTxt()
 
 SLASH_DG1, SLASH_DG2 = '/dg', '/dungeonguide';
 

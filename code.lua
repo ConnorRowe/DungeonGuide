@@ -79,7 +79,14 @@ end
 frame:SetScript("OnEvent", EHBossKill)
 
 --Display Text Array
-local dispTxt_WC = {"Proceed downwards through the cave, killing raptors along the way.<br />After the skeletons, turn left and walk towards the two night elves then kill |cffa335ee Lady Anacondra.", "Now, walk forwards up to the path bridging the two sides of the cavern.<br />Turn left and jump down from the bridge into the water below, and follow the cave to |cffa335ee Lord Pythas.", "", ""}
+local dispTxt_WC = {"Proceed downwards through the cave, killing raptors along the way.<br />After the skeletons, turn left and walk towards the two night elves then kill |cffa335ee Lady Anacondra.",
+					"Now, walk forwards up to the path bridging the two sides of the cavern.<br />Turn left and jump down from the bridge into the water below, and follow the cave to |cffa335ee Lord Pythas.",
+					"Carry on walking through the cavern until you get to |cffa335ee Lord Cobrahn.",
+					"Now Cobrahn is dead, jump off his platform into the cave below. Then walk east, towards the water until you find the turtle|cffa335ee Kresh.|cff191919 Kill him.",
+					"Carry on walking through the water while bearing right. Kill the giant thunder lizard named|cffa335ee Skum.",
+					"After killing the giant lizard, follow the cave forwards for a while. Stop when you see a waterfall, as you must make sure you do not fall through the gap. Assess the gap and jump across it, then carry on walking through the cave until you reach |cffa335eeLord Serpentis.|cff191919 Kill him.",
+					"Now, turn north-west and kill|cffa335ee Verdan the Everliving.",
+					"Now jump down the hole that the giant monster was hiding, and walk back through the water. When you see the ramp up to land, follow it. Then, walk past the skeletons and follow the cave until you find|cffa335ee Muyoh.|cff191919 One player must talk to |cffa335eeMuyoh|cff191919 to start the escort event."}
 
 --Function to update text on the HTMLFrame element
 function IncrementDispTxt()
@@ -99,16 +106,20 @@ end
 
 local function DungeonGuideCommands(msg, editbox)
 
-  if msg == "deadmines" then
-	  print("DG activating " .. msg)
-	  SetTomTomCoords("Deadmines", 10,10)
+	if msg == "skip" then
+		IncrementDispTxt()
+	end
+
+	if msg == "deadmines" then
+		print("DG activating " .. msg)
+		SetTomTomCoords("Deadmines", 10,10)
 	  
-  elseif msg == "wailingcaverns" then
-	print("DG activating " .. msg)
-	SetTomTomCoords("Wailing Caverns", 15,15)
+	elseif msg == "wailingcaverns" then
+		print("DG activating " .. msg)
+		SetTomTomCoords("Wailing Caverns", 15,15)
   
-  elseif msg == "test" then
-			
+	elseif msg == "test" then
+
 	-- Bosses and their encounter IDs
 	local anacondra = GetLFGDungeonEncounterInfo(1,1)
 	local cobrahn = GetLFGDungeonEncounterInfo(1,2)

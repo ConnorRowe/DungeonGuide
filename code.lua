@@ -2,12 +2,13 @@
 local frame = CreateFrame("FRAME", "DGFrame", UIParent)
 frame:RegisterEvent("BOSS_KILL")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+frame:RegisterEvent("GOSSIP_SHOW")
 
 curInstanceName = ""
 --Whether to display certain elements
-showFlag = false;
+showFlag = false
 --To keep track of the array index
-local dtIndex;
+local dtIndex
 
 local sizeX = 574; local sizeY = 156
 
@@ -52,9 +53,11 @@ local function UpdateFrameDisplay(bool)
 end
 
 local function EHBossKill(self, event, id, name, ...)
-	print(event)
 	if event == "BOSS_KILL" then
-		print("DG: " .. name .. "killed, proceeding to next step.")
+		print("DG: " .. name .. " killed, proceeding to next step.")
+		if name == "Mutanus the Devourer" then
+			dtIndex = 9
+		end
 		IncrementDispTxt()
 	elseif event == "PLAYER_ENTERING_WORLD" then
 		--Checking if the player is in an instance or not.
@@ -62,18 +65,21 @@ local function EHBossKill(self, event, id, name, ...)
 		if IsInInstance() then
 			local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceMapID, instanceGroupSize, lfgDungeonsID = GetInstanceInfo()
 			curInstanceName = name;
-			if name == "Wailing Caverns" then showFlag = true ; print(name) ; end
+			if name == "Wailing Caverns" then showFlag = true ; end
 			UpdateFrameDisplay(showFlag)
 		else
 			showFlag = false
 			UpdateFrameDisplay(showFlag)
 		end
 		
-		if showFlag then print("showFlag = true")
-		else print("showFlag = false")
-		end
-		
 		IncrementDispTxt()
+
+	elseif event == "GOSSIP_SHOW" then
+		local title1, gossip1 = GetGossipOptions()
+		if title1 == "Let the event begin!" then
+			dtIndex = 9
+			IncrementDispTxt()
+		end
 	end
 end
 frame:SetScript("OnEvent", EHBossKill)
@@ -86,7 +92,9 @@ local dispTxt_WC = {"Proceed downwards through the cave, killing raptors along t
 					"Carry on walking through the water while bearing right. Kill the giant thunder lizard named|cffa335ee Skum.",
 					"After killing the giant lizard, follow the cave forwards for a while. Stop when you see a waterfall, as you must make sure you do not fall through the gap. Assess the gap and jump across it, then carry on walking through the cave until you reach |cffa335eeLord Serpentis.|cff191919 Kill him.",
 					"Now, turn north-west and kill|cffa335ee Verdan the Everliving.",
-					"Now jump down the hole that the giant monster was hiding, and walk back through the water. When you see the ramp up to land, follow it. Then, walk past the skeletons and follow the cave until you find|cffa335ee Muyoh.|cff191919 One player must talk to |cffa335eeMuyoh|cff191919 to start the escort event."}
+					"Now jump down the hole that the giant monster was hiding, and walk back through the water. When you see the ramp up to land, follow it. Then, walk past the skeletons and follow the cave until you find|cffa335ee Muyoh.|cff191919 One player must talk to |cffa335eeMuyoh|cff191919 to start the escort event.<br/>After speaking to |cffa335eeMuyoh|cff191919, follow him and kill any enemies that attack!",
+					"After speaking to |cffa335eeMuyoh|cff191919, follow him and kill any enemies that attack!",
+					"Congratulations! You have defeated |cffa335eeMutanus the Devourer|cff191919 and saved the Wailing Caverns!"}
 
 --Function to update text on the HTMLFrame element
 function IncrementDispTxt()
@@ -95,7 +103,6 @@ function IncrementDispTxt()
 	else newText = ""
 	end
 	HTMLFrame:SetText(newText)
-	print("HTMLFRAME:SetText(" .. newText .. ")\n" .. "dtIndex = " .. dtIndex)
 	dtIndex = dtIndex + 1
 end	
 
@@ -108,15 +115,6 @@ local function DungeonGuideCommands(msg, editbox)
 
 	if msg == "skip" then
 		IncrementDispTxt()
-	end
-
-	if msg == "deadmines" then
-		print("DG activating " .. msg)
-		SetTomTomCoords("Deadmines", 10,10)
-	  
-	elseif msg == "wailingcaverns" then
-		print("DG activating " .. msg)
-		SetTomTomCoords("Wailing Caverns", 15,15)
   
 	elseif msg == "test" then
 
@@ -137,7 +135,7 @@ local function DungeonGuideCommands(msg, editbox)
 	--print("name: " .. name .. ", name2: " .. name2 .. ", typeID: " .. typeID)
 	
 	else
-	print("Syntax: /dg instance")
+	print("Syntax: /dg [skip/test]")
 	end
 end
 

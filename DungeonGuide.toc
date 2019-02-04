@@ -1,6 +1,5 @@
 ## Interface: 80000
 ## Title: DungeonGuide
 ## Auther: connorrowe
-## Dependencies: TomTom
 
 code.lua
